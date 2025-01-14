@@ -1,0 +1,4 @@
+// test
+
+use('my_db');
+print(db.school.countDocuments());
