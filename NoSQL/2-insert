@@ -1,3 +1,4 @@
-// Inserts a document into the school collection
-db = connect("127.0.0.1:27017/my_db");
-db.school.insertOne({ name: "Holberton school" });
+//Test
+db.school.insertOne({
+    name: "Holberton school"
+});
