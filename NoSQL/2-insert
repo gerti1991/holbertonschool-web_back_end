@@ -1,4 +1,5 @@
 //Test
-db.school.insertOne({
+db.getCollection('school').insertOne({
     name: "Holberton school"
-});
+  });
+
