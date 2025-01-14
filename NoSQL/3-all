@@ -1,0 +1,3 @@
+// my comment
+use('my_db');
+printjson(db.school.find().toArray());
