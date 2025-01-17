@@ -1,0 +1,4 @@
+// Connect to the MongoDB database passed as an argument
+
+db = connect("localhost:27017/" + db_name);
+db.school.find({ name: { $regex: "^Holberton", $options: "i" } }).forEach(printjson);
