@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+""" Log stats in Python """
 from pymongo import MongoClient
+
 
 def log_stats():
     # Connect to MongoDB
