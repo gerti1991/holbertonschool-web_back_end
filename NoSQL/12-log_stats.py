@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
-"""
-Log stats in Python
-"""
+"""Log stats"""
 from pymongo import MongoClient
 
 
-def log_stats():
-    """
-    Test
-    """
+def helper(a: dict) -> int:
+    """return log"""
     client = MongoClient('mongodb://127.0.0.1:27017')
-    db = client.logs
-    collection = db.nginx
-    total_logs = collection.count_documents({})
-    print(f"{total_logs} logs")
+    logs = client.logs.nginx
+    return logs.count_documents(a)
+
+
+def main():
+    """ provides some stats about Nginx logs stored in MongoDB """
+    print(f"{helper({})} logs")
     print("Methods:")
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    for method in methods:
-        count = collection.count_documents({"method": method})
-        print(f"\tmethod {method}: {count}")
-    status_check = collection.count_documents(
-        {"method": "GET", "path": "/status"})
-    print(f"{status_check} status check")
+    print(f"\tmethod GET: {helper({'method': 'GET'})}")
+    print(f"\tmethod POST: {helper({'method': 'POST'})}")
+    print(f"\tmethod PUT: {helper({'method': 'PUT'})}")
+    print(f"\tmethod PATCH: {helper({'method': 'PATCH'})}")
+    print(f"\tmethod DELETE: {helper({'method': 'DELETE'})}")
+    print(f"{helper({'method': 'GET', 'path': '/status'})} status check")
 
 
 if __name__ == "__main__":
-    log_stats()
+    main()
