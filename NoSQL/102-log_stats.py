@@ -7,33 +7,23 @@ from pymongo import MongoClient
 
 def log_stats():
     """
-    Test
+    Print log statistics from MongoDB
     """
     client = MongoClient('mongodb://127.0.0.1:27017')
     db = client.logs
     collection = db.nginx
     total_logs = collection.count_documents({})
-    if total_logs == 0:
-        print("0 logs")
-        print("Methods:")
-        print("    method GET: 0")
-        print("    method POST: 0")
-        print("    method PUT: 0")
-        print("    method PATCH: 0")
-        print("    method DELETE: 0")
-        print("0 status check")
-        print("IPs:")
-        return
-    methods = collection.aggregate([
-        {
-            '$group': {
-                '_id': '$method',
-                'count': {'$sum': 1}
-            }
-        }
-    ])
-    status_check = collection.count_documents({'status': '200'})
-    ip_counts = collection.aggregate([
+    print(f"{total_logs} logs")
+    print("Methods:")
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    for method in methods:
+        count = collection.count_documents({"method": method})
+        print(f"\tmethod {method}: {count}")
+    status_check = collection.count_documents(
+        {"method": "GET", "path": "/status"})
+    print(f"{status_check} status check")
+    print("IPs:")
+    top_ips = collection.aggregate([
         {
             '$group': {
                 '_id': '$ip',
@@ -47,13 +37,9 @@ def log_stats():
             '$limit': 10
         }
     ])
-    print(f"{total_logs} logs")
-    for method in methods:
-        print(f"Method {method['_id']}: {method['count']}")
-    print(f"{status_check} status check")
-    print("IPs:")
-    for ip in ip_counts:
-        print(f"    {ip['_id']}: {ip['count']}")
+
+    for ip in top_ips:
+        print(f"\t{ip['_id']}: {ip['count']}")
 
 
 if __name__ == "__main__":
